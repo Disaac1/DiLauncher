@@ -1,0 +1,19 @@
+{
+  "profiles": {
+	"DiLauncher": {
+	  "commandName": "Project"
+	},
+	"Launch": {
+	  "commandName": "Executable",
+	  "executablePath": "C:\\Users\\isaac\\Documents\\GitHub\\DiLauncher\\.godotFiles\\Godot_v4.1-stable_mono_win64.exe",
+	  "commandLineArgs": "--path .",
+	  "workingDirectory": "C:\\Users\\isaac\\Documents\\GitHub\\DiLauncher"
+	},
+	"Editor": {
+	  "commandName": "Executable",
+	  "executablePath": "C:\\Users\\isaac\\Documents\\GitHub\\DiLauncher\\.godotFiles\\Godot_v4.1-stable_mono_win64.exe",
+	  "commandLineArgs": "--path . --editor",
+	  "workingDirectory": "C:\\Users\\isaac\\Documents\\GitHub\\DiLauncher"
+	}
+  }
+}
