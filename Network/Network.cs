@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using System;
 using System.Threading.Tasks;
 
 public partial class Network : Node {
@@ -36,9 +37,7 @@ public partial class Network : Node {
 	public override void _EnterTree()
 	{
 		base._EnterTree();
-		if(instance == null){
-			instance = this;
-		}
+		instance ??= this;
 	}
 
 	public override void _Ready()
@@ -63,7 +62,7 @@ public partial class Network : Node {
 		DefaultEvents.instance.STATUS += (string status) => {
 			GD.Print("Status: "+status);
 		};
-		SendRendezvous += (string name, Variant data) => _SendRendezvous(name, data);
+		OnSendRendezvous += (string name, Variant data) => _SendRendezvous(name, data);
 	}
 
 	public void Connect(){
@@ -99,17 +98,19 @@ public partial class Network : Node {
 
 
 	public async void doChecks(){
-		
-		System.Collections.Generic.List<Task> tasks = new System.Collections.Generic.List<Task>();
 
-		tasks.Add(Task.Run(async () => {
-			await CheckIfRendezvousOpen();
-			await CheckIfPortOpen();
-		}));
-		tasks.Add(CheckUpnp());
-		
+        System.Collections.Generic.List<Task> tasks = new System.Collections.Generic.List<Task>
+        {
+            Task.Run(async () =>
+            {
+                await CheckIfRendezvousOpen();
+                await CheckIfPortOpen();
+            }),
+            CheckUpnp()
+        };
 
-		await Task.WhenAll(tasks);
+
+        await Task.WhenAll(tasks);
 
 		EmitSignal(Network.SignalName.OnChecksCompleted);
 
@@ -131,10 +132,14 @@ public partial class Network : Node {
 
 	}
 
-	public static void SendToRendezvous(string eventName, Variant data){
-		instance._SendRendezvous(eventName, data);
+	public static void EmitRendezvous(string eventName, Variant data){
+		instance.EmitSignal(SignalName.SendRendezvous, eventName, data);
 	}
 
+	public static void RequestRendezvous(string eventName, Variant data)
+	{
+		instance.EmitSignal(SignalName.SendRendezvous, data);
+	}
 
 	public async Task CheckIfRendezvousOpen(){
 		//Todo convert to propper event
@@ -142,16 +147,19 @@ public partial class Network : Node {
 
 		//On a seperate thread poll the tcp socket
 		
-		await Task.Run(() => {
-			while(true){
-				tcp.Poll();
-				if(tcp.GetAvailableBytes() > 0){
-					GD.Print("Rendezvous is open");
-					rendezvousAvailable = true;
-					break;
+		await Task.WhenAny(
+			Task.Delay(5000),
+			Task.Run(() => {
+				while(true){
+					tcp.Poll();
+					if(tcp.GetAvailableBytes() > 0){
+						GD.Print("Rendezvous is open");
+						rendezvousAvailable = true;
+						break;
+					}
 				}
-			}
-		});
+			})
+		);
 	}
 
 	public async Task CheckIfPortOpen(){
@@ -170,15 +178,23 @@ public partial class Network : Node {
 		_SendRendezvous("checkPort", defaultPort);
 
 		await Task.WhenAny(Task.Delay(4000), Task.Run(() => {
-			GD.Print("Waiting for response");
-			while(true){
-				Task.Delay(100);
-				if(socket.GetAvailablePacketCount() > 0){
-					GD.Print("Port "+defaultPort+" is open");
-					portAvailable = true;
-					break;
+			try
+			{
+				GD.Print("Waiting for response");
+				while (true)
+				{
+					Task.Delay(100);
+					if (socket.GetAvailablePacketCount() > 0)
+					{
+						GD.Print("Port " + defaultPort + " is open");
+						portAvailable = true;
+						break;
+					}
+
 				}
-				
+			} catch (ObjectDisposedException)
+			{
+				GD.Print("Socket was disposed... most likely due to user closing");
 			}
 		}));
 
