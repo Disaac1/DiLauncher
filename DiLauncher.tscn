@@ -1,0 +1,114 @@
+[gd_scene load_steps=4 format=3 uid="uid://877jbexu5nfw"]
+
+[ext_resource type="Script" path="res://Launcher/launcher_network.cs" id="1_8rjrp"]
+[ext_resource type="Script" path="res://Launcher/DiLauncher.cs" id="1_oirl7"]
+[ext_resource type="Script" path="res://Util/LabelEdit.cs" id="3_1ltcj"]
+
+[node name="Launcher" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oirl7")
+
+[node name="back" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Network" type="Panel" parent="." node_paths=PackedStringArray("statusLabel")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 50.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+script = ExtResource("1_8rjrp")
+statusLabel = NodePath("status")
+
+[node name="status" type="Label" parent="Network"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -104.0
+offset_right = 104.0
+offset_bottom = 26.0
+grow_horizontal = 2
+text = "Network Status : UNKOWN"
+
+[node name="main" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_bottom = -10.0
+grow_vertical = 2
+alignment = 1
+
+[node name="join" type="Button" parent="main"]
+layout_mode = 2
+theme_override_constants/h_separation = 50
+theme_override_font_sizes/font_size = 50
+text = "Join Game"
+
+[node name="Popup" type="Popup" parent="main/join"]
+title = "Room Code"
+initial_position = 2
+size = Vector2i(300, 150)
+visible = true
+borderless = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="main/join/Popup"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="main/join/Popup/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 1
+mouse_filter = 0
+mouse_default_cursor_shape = 1
+theme_override_font_sizes/font_size = 50
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_1ltcj")
+PlaceHolderText = "Room Code"
+onlyUppercase = true
+
+[node name="submit" type="Button" parent="main/join/Popup/VBoxContainer"]
+layout_mode = 2
+text = "Submit"
+
+[node name="host" type="Button" parent="main"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 50
+text = "Host Game"
+
+[node name="download" type="Button" parent="main"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Game Browser"
+
+[node name="HSeparator" type="HSeparator" parent="main"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="settings" type="Button" parent="main"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Settings"

@@ -11,12 +11,14 @@ config_version=5
 [application]
 
 config/name="DiLauncher"
+run/main_scene="res://DiLauncher.tscn"
 config/features=PackedStringArray("4.1", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Rendezvous="*res://Network/Rendezvous.cs"
+Network="res://Network/Network.cs"
 
 [dotnet]
 
