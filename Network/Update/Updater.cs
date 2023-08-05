@@ -7,6 +7,8 @@ public partial class Updater : Node
 
     public override void _Ready()
     {
+        
+        
        
     }
 
