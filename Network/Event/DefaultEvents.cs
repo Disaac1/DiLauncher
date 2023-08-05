@@ -25,9 +25,7 @@ public partial class DefaultEvents : Node {
     public override void _EnterTree()
     {
         Name = "DefaultEvents";
-        if(instance == null){
-            instance = this;
-        }
+        instance ??= this;
     }
 
     public override void _Ready()

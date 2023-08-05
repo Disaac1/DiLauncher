@@ -12,10 +12,8 @@ public partial class UpdateEvents : Node
 
     public override void _EnterTree()
     {
-        Name = "DefaultEvents";
-        if(instance == null){
-            instance = this;
-        }
+        Name = "UpdateEvents";
+        instance ??= this;
     }
 
 
@@ -31,6 +29,7 @@ public partial class UpdateEvents : Node
         });
 
         Network.instance.SendRendezvous += (string eventName, Variant data) => {
+            GD.Print($"{eventName} {data}");
             if(eventName == UpdateEvents.SignalName.RequestLatestXML){
                 EmitSignal(Network.SignalName.OnSendRendezvous, "RequestLatestXML", data);
             }
