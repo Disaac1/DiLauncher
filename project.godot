@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Project-Minigame"
+config/name="DiLauncher"
 config/features=PackedStringArray("4.1", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -20,7 +20,7 @@ Rendezvous="*res://Network/Rendezvous.cs"
 
 [dotnet]
 
-project/assembly_name="Project-Minigame"
+project/assembly_name="DiLauncher"
 
 [rendering]
 
