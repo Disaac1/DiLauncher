@@ -72,10 +72,14 @@ public partial class Network : Node {
 	public override void _Process(double delta)
 	{
 		tcp.Poll();
-		while(tcp.GetAvailableBytes() > 0){
-			string packet = tcp.GetUtf8String();
-			handleData(packet);
-		}
+		if(tcp.GetStatus() == StreamPeerTcp.Status.Connected)
+		{
+            while (tcp.GetAvailableBytes() > 0)
+            {
+                string packet = tcp.GetUtf8String();
+                handleData(packet);
+            }
+        }
 	}
 
 	public void handleData(string packet){
@@ -146,16 +150,19 @@ public partial class Network : Node {
 		tcp.PutData("status".ToUtf8Buffer());
 
 		//On a seperate thread poll the tcp socket
-		
+
 		await Task.WhenAny(
-			Task.Delay(5000),
+			Task.Delay(3000),
 			Task.Run(() => {
-				while(true){
+				while (true) {
 					tcp.Poll();
-					if(tcp.GetAvailableBytes() > 0){
-						GD.Print("Rendezvous is open");
-						rendezvousAvailable = true;
-						break;
+					if (tcp.GetStatus() == StreamPeerTcp.Status.Connected)
+					{
+						if(tcp.GetAvailableBytes() > 0){
+							GD.Print("Rendezvous is open");
+							rendezvousAvailable = true;
+							break;
+						}
 					}
 				}
 			})
