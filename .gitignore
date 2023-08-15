@@ -1,3 +1,5 @@
+#Custom igonores
+.export/*.*
 # Godot 4+ specific ignores
 .godot/
 .godotFiles/
