@@ -8,6 +8,7 @@ public partial class EventHandler : Node {
     {
         register(new DefaultEvents());
         register(new UpdateEvents());
+        register(new PackEvents());
     }
 
 

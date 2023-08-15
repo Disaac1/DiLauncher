@@ -58,6 +58,11 @@ public partial class DiLauncher : Control
 
             popup.Popup();
         };
+
+        GetNode<Button>("main/download").Pressed += () =>
+        {
+            GetTree().ChangeSceneToFile("res://Launcher/game_browser.tscn");
+        };
     }
 
     
