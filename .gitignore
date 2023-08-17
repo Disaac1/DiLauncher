@@ -1,6 +1,7 @@
 #Custom igonores
 .export/*.pck
 .export/*.zip
+.export/*
 Data/*
 !Data/ExampleGame
 
