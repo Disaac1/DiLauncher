@@ -16,7 +16,7 @@ public partial class CreatePack : SceneTree
 
 		foreach(GamePack p in GamePacks.packs)
 		{
-			if (!p.isPack && p.packVersion != "dev")
+			if (p.dev && p.packVersion != "dev")
 			{
 				tasks.Add(Task.Run(() => create(p)));
 			}
@@ -70,18 +70,19 @@ public partial class CreatePack : SceneTree
 	{
 		GD.Print(pack.id + " cleanup");
 
-		DirAccess.RemoveAbsolute(pack.path + "/export_presets.cfg");
-		DirAccess.RemoveAbsolute(pack.path + "/project.godot");
-		DirAccess.RemoveAbsolute(pack.path + "/.godot");
+		Util.removeDirRecursive(pack.path + "/.export");
+
 	}
 
 	public static void setupWorkspace(GamePack pack)
 	{
 		GD.Print(pack.id + " being packed");
-		
-		DirAccess.CopyAbsolute("res://.export/ProjectSettings/export_presets.cfg", pack.path + "/export_presets.cfg");
 
-        DirAccess.CopyAbsolute("res://.export/ProjectSettings/project.godot", pack.path + "/project.godot");
+		Util.CopyDir("res://Data/" + pack.id, "res://Data/" + pack.id + "/.export/Data/" + pack.id);
+		
+		DirAccess.CopyAbsolute("res://.export/ProjectSettings/export_presets.cfg", pack.path + ".export/export_presets.cfg");
+
+        DirAccess.CopyAbsolute("res://.export/ProjectSettings/project.godot", pack.path + ".export/project.godot");
     }
 
 

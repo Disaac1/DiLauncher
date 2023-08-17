@@ -10,7 +10,7 @@ if [%1]==[] (
 
 mkdir .export\%1
 echo Making folder at .export\%1
-.godotFiles\Godot_v4.1.1-stable_mono_win64.exe --headless --path Data\%1 --export-pack "Pck" ../../.export/%1/pack.zip
+.godotFiles\Godot_v4.1.1-stable_mono_win64.exe --headless --path Data\%~1\.export --export-pack "Pck" ../../../.export/%1/pack.zip
 echo Exported pack.pck to 
 
 copy Data\%1\pack.json .export\%1\pack.json
