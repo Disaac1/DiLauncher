@@ -1,0 +1,14 @@
+@echo off
+
+echo Creating Pack for %1
+
+if [%1]==[] (
+  echo Argument wasn't passed
+  pause
+  goto exit
+)
+
+%0\..\..\.godotFiles\Godot_v4.1.1-stable_mono_win64.exe --headless --path Data\%1 --export-pack "Pck" ../../.export/%1.zip
+
+:exit
+echo Finished

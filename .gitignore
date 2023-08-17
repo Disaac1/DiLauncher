@@ -1,5 +1,6 @@
 #Custom igonores
-.export/*.*
+.export/*.pck
+.export/*.zip
 Data/*
 
 
