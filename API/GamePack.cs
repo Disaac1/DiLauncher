@@ -12,7 +12,6 @@ public partial class GamePack : Resource
 	 */
 	public string packName;
 
-
 	/** <summary> Version of the pack.
 	* Must be in the major.minor.revision format
 	* </summary>
@@ -24,13 +23,13 @@ public partial class GamePack : Resource
 	 */
 	public readonly string id;
 
-	public string gameScenePath = "game.tscn";
-
 	public Texture2D icon = null;
 
 	public readonly string path;
 
 	public bool loaded = false;
+
+	public bool isPack = true;
 
 	public GamePack(string id)
 	{
@@ -48,6 +47,7 @@ public partial class GamePack : Resource
         if (!FileAccess.FileExists(path + "/pack.pck") && !FileAccess.FileExists(path + "/pack.zip"))
         {
             loaded = true;
+			isPack = false;
         }
 
 		//Pack needs to be loaded
