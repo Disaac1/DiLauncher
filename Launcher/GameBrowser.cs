@@ -1,6 +1,4 @@
 using Godot;
-using Godot.Collections;
-using System;
 
 public partial class GameBrowser : Control
 {
@@ -14,6 +12,7 @@ public partial class GameBrowser : Control
 
 		GetNode<ItemList>("gameList").ItemSelected += onItemClicked;
 		GetNode<Button>("panel/run").Pressed += runPack;
+		GetNode<Button>("panel/install").Pressed += () => selectedPack.downloadLatest();
 	}
 
 	public void runPack()
@@ -36,9 +35,10 @@ public partial class GameBrowser : Control
 
 	public void updateInfo(GamePack pack)
 	{
+		GD.Print(pack.Serialize());
 		GetNode<Label>("info/name").Text = pack.packName;
-		GetNode<Label>("info/version").Text = "Installed: " + pack.packVersion + "\nLoaded: " +pack.loaded;
-        GetNode<Label>("info/description").Text = pack.path;
+		GetNode<Label>("info/version").Text = "Installed: " + pack.packVersion + "\nLoaded: " +pack.loaded + "\nOnline: "+((pack.latestVersion==null)?"None":pack.latestVersion);
+        GetNode<Label>("info/description").Text = pack.packPath;
         GetNode<TextureRect>("info/icon").Texture = pack.icon;
 	}
 
