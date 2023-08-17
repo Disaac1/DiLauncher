@@ -1,7 +1,6 @@
 using Godot;
 using Godot.Collections;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 public partial class Network : Node {
@@ -51,9 +50,6 @@ public partial class Network : Node {
 		if(!killSwitch) doChecks();
 		
 		OnChecksCompleted += Finshed;
-
-
-		EmitSignal(SignalName.SendRendezvous, "status", "TESTS");
 	}
 
 
