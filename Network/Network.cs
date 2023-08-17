@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 public partial class Network : Node {
@@ -33,6 +34,8 @@ public partial class Network : Node {
 
 	public static Network instance = null;
 
+	public static bool killSwitch = true;
+
 
 	public override void _EnterTree()
 	{
@@ -45,7 +48,7 @@ public partial class Network : Node {
 		Setup();
 		Connect();
 
-		doChecks();
+		if(!killSwitch) doChecks();
 		
 		OnChecksCompleted += Finshed;
 
@@ -80,6 +83,11 @@ public partial class Network : Node {
                 handleData(packet);
             }
         }
+		if (killSwitch)
+		{
+			SetProcess(false);
+		}
+			
 	}
 
 	public void handleData(string packet){
@@ -114,8 +122,20 @@ public partial class Network : Node {
         };
 
 
-        await Task.WhenAll(tasks);
+		await Task.WhenAny(Task.WhenAll(tasks), Task.Run(() =>
+		{
+			while(true)
+			{
+				if (killSwitch)
+				{
+					GD.Print("Killing tests");
+					return;
+				}
 
+			}
+		}));
+
+		if(killSwitch) return;
 		EmitSignal(Network.SignalName.OnChecksCompleted);
 
 
