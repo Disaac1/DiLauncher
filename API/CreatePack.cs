@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ public partial class CreatePack : SceneTree
 
 		foreach(GamePack p in GamePacks.packs)
 		{
-			if(!p.isPack)
+			if (!p.isPack && p.packVersion != "dev")
 			{
 				tasks.Add(Task.Run(() => create(p)));
 			}
@@ -30,21 +31,38 @@ public partial class CreatePack : SceneTree
 
     public static void create(GamePack pack)
 	{
-        //Create a thread to handle creation of pack
 
-            setupWorkspace(pack);
 
-            //Run cmd to pack godot folder to temp loacation
-            int pid = OS.CreateProcess(".export/createPack.bat", new string[] { pack.id }, true);
+        //Check if file already exists
+        if (FileAccess.FileExists("res://.export/" + pack.id+"."+pack.packVersion+".zip"))
+        {
+            //File already exists
+            GD.PrintErr("File already exists skipping to save old version");
+            return;
+        }
 
-            while (OS.IsProcessRunning(pid))
-            {
-                OS.DelayMsec(500);
-            }
+		//Setup files for export
+        setupWorkspace(pack);
 
-            GD.Print("Finished export of " + pack.id);
+        //Run cmd to pack godot folder to temp loacation
+        int pid = OS.CreateProcess(".export/createPack.bat", new string[] { pack.id }, true);
 
-           removeWorkspace(pack);
+        while (OS.IsProcessRunning(pid))
+        {
+            OS.DelayMsec(500);
+        }
+
+        GD.Print("Finished export of " + pack.id);
+
+		//Zipping pack.json and pack.pck to file name id.version.zip
+		ZipFile.CreateFromDirectory(".export/" + pack.id, ".export/" + pack.id + "." + pack.packVersion + ".zip");
+
+        removeWorkspace(pack);
+
+		//Remove temp folder
+		DirAccess.RemoveAbsolute(".export/" + pack.id + "/pack.zip");
+        DirAccess.RemoveAbsolute(".export/" + pack.id + "/pack.json");
+        DirAccess.RemoveAbsolute(".export/" + pack.id);
 
 	}
 
