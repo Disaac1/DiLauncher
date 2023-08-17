@@ -1,6 +1,8 @@
 using Godot;
 using Godot.Collections;
-using System;
+using System.IO.Compression;
+using System.Linq;
+using System.Net;
 
 public partial class GamePack : Resource
 {
@@ -26,84 +28,196 @@ public partial class GamePack : Resource
 	public Texture2D icon = null;
 
 	public readonly string path;
+	public string packPath;
 
 	public bool loaded = false;
 
-	public bool isPack = true;
+	public bool downloaded = false;
 
-	public GamePack(string id)
+	public string latestVersion;
+
+	public bool online = false;
+	public bool dev = false;
+
+	private GamePack(string id, string packPath)
 	{
-		this.id = id;
+        this.id = id;
+        this.path = "res://Data/" + id + "/";
+		this.packPath = packPath;
+    }
 
-		//Check if dev folder or .pck
-		if (FileAccess.FileExists("res://Data/" + id + "/pack.json"))
-		{
-			path = "res://Data/" + id;
-		} else
-		{
-			path = "user://Data/" + id;
-		}
-
-        if (!FileAccess.FileExists(path + "/pack.pck") && !FileAccess.FileExists(path + "/pack.zip"))
+	public static GamePack create(string id, string packPath)
+	{
+        GamePack old = GamePacks.packs.FirstOrDefault((GamePack p) => p.id == id, null);
+        if (old != null)
         {
-            loaded = true;
-			isPack = false;
+			return old;
         }
 
-		//Pack needs to be loaded
-		if (OS.HasFeature("Editor") && !loaded)
+		GamePack pack = new GamePack(id, packPath);
+
+		if (FileAccess.FileExists(packPath))
 		{
-			GD.Print("Pack loaded in engine thar be dragons");
+			pack.downloaded = true;
 		}
 
-	}
+		return pack;
+    }
 
-	public static GamePack deserilize(string id, string data)
+	public static GamePack createDev(string id)
+	{
+        GamePack old = GamePacks.packs.FirstOrDefault((GamePack p) => p.id == id, null);
+        if (old != null)
+        {
+            return old;
+        }
+
+        GamePack pack = new GamePack(id, "");
+
+		pack.downloaded = true;
+		pack.loaded = true;
+		pack.dev = true;
+
+		return pack;
+    }
+
+	public static GamePack createOnline(string id)
+	{
+        GamePack old = GamePacks.packs.FirstOrDefault((GamePack p) => p.id == id, null);
+        if (old != null)
+        {
+			old.online = true;
+            return old;
+        }
+
+        GamePack pack = new GamePack(id, "");
+		pack.online = true;
+
+        return pack;
+    }
+
+	public static GamePack deserilizeDev(string id, string data)
 	{
 
 		GD.Print("Loading pack with id: ", id);
-		GD.Print(data);
 		Dictionary dict = Json.ParseString(data).AsGodotDictionary();
 
-		GamePack pack = new GamePack(id);
+		GamePack pack = createDev(id);
 		pack.packName = dict["name"].AsString();
 		pack.packVersion = dict["version"].AsString();
-
-		GD.Print("Path is ", pack.path);
-		if (FileAccess.FileExists(pack.path+"/icon.png"))
-		{
-			GD.Print("Icon found at " + pack.path + "/icon.png");
-			//pack.icon = GD.Load<Texture2D>(pack.path + "/icon.png");
-		}
-
-
 		return pack;
 		
 	}
 
+    public static GamePack deserilize(string id, string data)
+    {
+
+        GD.Print("Loading pack with id: ", id);
+        Dictionary dict = Json.ParseString(data).AsGodotDictionary();
+
+        GamePack pack = create(id, "user://Data/"+id+"/pack.zip");
+		if (pack.dev)
+		{
+			return pack;
+		}
+        pack.packName = dict["name"].AsString();
+        pack.packVersion = dict["version"].AsString();
+        return pack;
+
+    }
+
+    public void reloadPack()
+	{
+		//Read new json
+		string data = FileAccess.GetFileAsString($"user://Data/{id}/pack.json");
+
+		GD.Print("Reloading pack with id: ", id);
+
+		Dictionary dict = Json.ParseString(data).AsGodotDictionary();
+
+		packName = dict["name"].AsString();
+		packVersion = dict["version"].AsString();
+
+	}
 
 	public void run()
 	{
-		GD.Print("Running Gamepack " + id);
-		if(!loaded)
+
+        if (OS.HasFeature("editor"))
+        {
+            GD.Print("Running Gamepack " + id);
+            if (!loaded)
+            {
+                GD.PushError("Loading pck's in editor isn't supported... Workaround later");
+                return;
+            }
+        }
+		else
 		{
-			GD.PrintErr("Loading pck's in editor isn't supported... Workaround later");
+            if (!loaded)
+            {
+                GD.Print("Loading .pck");
+                bool success = ProjectSettings.LoadResourcePack(packPath);
+
+                if (!success)
+                {
+                    GD.PrintErr("Failed to load pack");
+                    return;
+                }
+
+                Util.Tree();
+            }
+        }
+        Network.instance.GetTree().ChangeSceneToFile(path + "main.tscn");
+    }
+
+	public string Serialize()
+	{
+		Dictionary dict = new Dictionary();
+		dict.Add("name", packName);
+		dict.Add("version", packVersion);
+		dict.Add("id", id);
+		dict.Add("path", path);
+		dict.Add("loaded", loaded);
+		dict.Add("downloaded", downloaded);
+		dict.Add("latest", latestVersion);
+
+		return Json.Stringify(dict);
+	}
+
+	public void downloadLatest()
+	{
+		GD.Print("Downloading latest version of pack: "+id);
+		if(packVersion == latestVersion)
+		{
+			GD.Print("Pack already up to date");
 			return;
 		}
-		/**if (!loaded)
+		if (!online)
 		{
-			GD.Print("Loading .pck");
-			bool success = ProjectSettings.LoadResourcePack(path + "/pack.pck");
-		
-			if (!success)
-			{
-				GD.PrintErr("Failed to load pack");
-				return;
-			}
+			GD.Print("Pack isn't on the repo");
+			return;
+		}
+		if(dev)
+		{
+			GD.Print("Dev pack can't be updated");
+			return;
+		}
 
-			Util.Tree();
-		}*/
-        Network.instance.GetTree().ChangeSceneToFile(path+"/main.tscn");
-    }
+		//Download the pack
+		WebClient client = new WebClient();
+		DiHub.get(id+"/"+id+"."+latestVersion+".zip", "user://"+id+".zip");
+
+		//Extract the pack
+		ZipFile.ExtractToDirectory(ProjectSettings.GlobalizePath($"user://{id}.zip"), ProjectSettings.GlobalizePath($"user://Data/{id}/"));
+
+		DirAccess.RemoveAbsolute(ProjectSettings.GlobalizePath($"user://{id}.zip"));
+
+		//Update the pack
+		reloadPack();
+
+		downloaded = true;
+		packPath = $"user://Data/{id}/pack.zip";
+	}
 
 }
