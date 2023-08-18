@@ -1,13 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://c4u2saryfobih"]
+[gd_scene load_steps=2 format=3 uid="uid://c4u2saryfobih"]
 
 [ext_resource type="Script" path="res://networking_test.cs" id="1_awydg"]
-[ext_resource type="Script" path="res://Network/Network.cs" id="2_pk2nf"]
 
 [node name="NetworkingTest" type="Node2D"]
 script = ExtResource("1_awydg")
-
-[node name="Network" type="Node2D" parent="."]
-script = ExtResource("2_pk2nf")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
