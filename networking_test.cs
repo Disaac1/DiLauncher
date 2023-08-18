@@ -9,7 +9,7 @@ public partial class networking_test : Node2D
 
     public override void _Ready()
     {
-        rendezvous = GetNode<Rendezvous>("/root/Rendezvous");
+        rendezvous = GetNode<Rendezvous>("/root/Network/Rendezvous");
 
         GetNode<Button>("CanvasLayer/Control/createRoom").Pressed += onCreateRoom;
         GetNode<Button>("CanvasLayer/Control/joinRoom").Pressed += onJoinRoom;
@@ -20,21 +20,21 @@ public partial class networking_test : Node2D
     public override void _Process(double delta)
     {
         //Update the Rendezvous server label
-        GetNode<Label>("CanvasLayer/Control/Label").Text 
+        /**GetNode<Label>("CanvasLayer/Control/Label").Text 
             = "Rendezvous Server: " + rendezvous.isAlive + "\n"
             + "Room: " + rendezvous._room._name + "\n"
             + "Host: " + rendezvous._room._host.GetId() + "\n"
             + "Clients: " + rendezvous._room._clients.Count + "\n";
     
-        tick();
+        tick();*/
     }
 
     public void onCreateRoom(){
-        rendezvous.createRoom("Test Room");
+        rendezvous.CreateRoom("Test Room");
     }
 
     public void onJoinRoom(){
-        rendezvous.joinRoom("1234");
+        rendezvous.JoinRoom("1234");
     }
 
     public void onLeaveRoom(){
