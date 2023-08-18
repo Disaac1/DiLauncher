@@ -33,21 +33,26 @@ public partial class Network : Node {
 
 	public static Network instance = null;
 
-	public static bool killSwitch = true;
+	public Rendezvous rendezvous = new Rendezvous();
+
+	public static bool killSwitch = false;
 
 
 	public override void _EnterTree()
 	{
 		base._EnterTree();
 		instance ??= this;
-	}
+
+    }
 
 	public override void _Ready()
 	{
-		Setup();
-		Connect();
+        Setup();
+        Connect();
 
-		if(!killSwitch) doChecks();
+        AddChild(rendezvous);
+
+        if (!killSwitch) doChecks();
 		
 		OnChecksCompleted += Finshed;
 	}
@@ -158,7 +163,7 @@ public partial class Network : Node {
 
 	public static void RequestRendezvous(string eventName, Variant data)
 	{
-		instance.EmitSignal(SignalName.SendRendezvous, data);
+		//instance.EmitSignal(SignalName.SendRendezvous, data);
 	}
 
 	public async Task CheckIfRendezvousOpen(){
