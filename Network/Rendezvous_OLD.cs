@@ -2,7 +2,7 @@ using System;
 using Godot;
 using Godot.Collections;
 
-public partial class Rendezvous : Node {
+public partial class Rendezvous_OLD : Node {
 
 
 	//Since the Rendezvous server is centrealized we know the IP and PORT and can use a TCP connection
@@ -25,7 +25,7 @@ public partial class Rendezvous : Node {
 
 	public bool isAlive = false;
 
-	public Rendezvous(){
+	public Rendezvous_OLD(){
 		_self.Name = "Self";
 		AddChild(_self);
 		_room.Name = "Room";
