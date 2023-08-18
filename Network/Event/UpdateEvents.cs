@@ -14,6 +14,7 @@ public partial class UpdateEvents : Node
     {
         Name = "UpdateEvents";
         instance ??= this;
+        GD.Print("Registered: " + Name);
     }
 
 
@@ -22,7 +23,6 @@ public partial class UpdateEvents : Node
         
 
         Network.instance.OnEvent += ((string name, Variant data) => {
-            GD.Print("UpdateEvents: "+name+" "+data);
             if(name == "RequestLatestXML"){
                 EmitSignal(UpdateEvents.SignalName.RequestLatestXML, data.AsGodotDictionary());
             }

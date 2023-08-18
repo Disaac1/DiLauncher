@@ -25,12 +25,12 @@ public partial class DefaultEvents : Node {
     {
         Name = "DefaultEvents";
         instance ??= this;
+        GD.Print("Registered: " + Name);
     }
 
     public override void _Ready()
     {
         Network.instance.OnEvent += ((string name, Variant data) => {
-            GD.Print("DefaultEvents: "+name+" "+data);
             if(name == "status"){
                 EmitSignal(DefaultEvents.SignalName.STATUS, data.ToString());
             }

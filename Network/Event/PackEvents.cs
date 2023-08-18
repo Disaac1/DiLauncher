@@ -13,6 +13,7 @@ public partial class PackEvents : Node
     {
         Name = "PackEvents";
         instance ??= this;
+        GD.Print("Registered: " + Name);
     }
 
     public override void _Ready()
