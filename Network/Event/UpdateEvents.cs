@@ -31,7 +31,7 @@ public partial class UpdateEvents : Node
         Network.instance.SendRendezvous += (string eventName, Variant data) => {
             GD.Print($"{eventName} {data}");
             if(eventName == UpdateEvents.SignalName.RequestLatestXML){
-                EmitSignal(Network.SignalName.OnSendRendezvous, "RequestLatestXML", data);
+                Network.instance._SendRendezvous("RequestLatestXML", data);
             }
         };
 

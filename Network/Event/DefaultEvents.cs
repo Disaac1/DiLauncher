@@ -38,10 +38,10 @@ public partial class DefaultEvents : Node {
 
         Network.instance.SendRendezvous += (string eventName, Variant data) => {
             if(eventName == DefaultEvents.SignalName.STATUS){
-                EmitSignal(Network.SignalName.OnSendRendezvous, "status", data);
+                Network.instance._SendRendezvous("status", data);
             }
             if(eventName == DefaultEvents.SignalName.CheckPort){
-                EmitSignal(Network.SignalName.OnSendRendezvous, "checkPort", data);
+                Network.instance._SendRendezvous("checkPort", data);
             }
         };
     }

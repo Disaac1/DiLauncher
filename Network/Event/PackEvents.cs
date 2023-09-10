@@ -27,7 +27,7 @@ public partial class PackEvents : Node
         {
             if(eventName == PackEvents.SignalName.RequestPacks)
             {
-                EmitSignal(Network.SignalName.OnSendRendezvous, "RequestPack", data);
+                Network.instance._SendRendezvous("RequestPack", data);
             }
         };
     }
