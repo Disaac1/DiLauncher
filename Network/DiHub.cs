@@ -1,6 +1,7 @@
 
 
 using Godot;
+using System.IO;
 using System.Net;
 
 public partial class DiHub
@@ -33,6 +34,34 @@ public partial class DiHub
 		
 
 		GD.Print("Downloaded " + uri + " to " + saveLocation);
+	}
+
+	public static Resource load(string location)
+	{
+		//Download file from DiHub and then load it from godot
+		string ext = Path.GetExtension(location);
+
+		if(ext != ".webp") return null;
+		string tempFile = "user://temp/" + Path.GetRandomFileName() + ext;
+		get(location, tempFile);
+		//Godot doesn't allow loading files from user:// so we have to load it with file type specific code
+
+		Resource res;
+
+		switch(ext)
+		{
+			case ".webp":
+				Image image = new Image();
+				image.Load(tempFile);
+				res = image;
+				break;
+			default:
+				GD.Print("Unknown file type: " + ext);
+				res = null;
+				break;
+		}
+		DirAccess.RemoveAbsolute(tempFile);
+		return res;
 	}
 
 }
