@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3 uid="uid://cb0ft6tgsbvqr"]
+
+[ext_resource type="Script" path="res://playerCard.cs" id="1_gcqvt"]
+[ext_resource type="Texture2D" uid="uid://bluwr38so0h5o" path="res://icon.svg" id="2_ji15g"]
+[ext_resource type="Script" path="res://Util/LabelEdit.cs" id="3_lsdwb"]
+
+[node name="playerCard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -552.0
+offset_bottom = -461.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_gcqvt")
+
+[node name="back" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="icon" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0516667
+anchor_top = 0.144385
+anchor_right = 0.265
+anchor_bottom = 0.828877
+grow_vertical = 2
+texture = ExtResource("2_ji15g")
+expand_mode = 1
+stretch_mode = 6
+metadata/_edit_use_anchors_ = true
+
+[node name="name" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3
+anchor_top = 0.262032
+anchor_right = 0.653667
+anchor_bottom = 0.72146
+offset_right = -0.199982
+offset_bottom = 0.086998
+mouse_filter = 0
+mouse_default_cursor_shape = 1
+text = "Disaac1"
+vertical_alignment = 1
+text_overrun_behavior = 3
+script = ExtResource("3_lsdwb")
+PlaceHolderText = "Player Name"
+metadata/_edit_use_anchors_ = true
