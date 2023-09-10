@@ -3,4 +3,11 @@
     <TargetFramework>net6.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Data\SpaceSalvagers\Compute\" />
+    <Folder Include="Data\SpaceSalvagers\Terrain\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\spacesalvagers\compute\MarchingCubes.glsl" />
+  </ItemGroup>
 </Project>

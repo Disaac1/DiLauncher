@@ -20,14 +20,15 @@ public partial class networking_test : Node2D
     public override void _Process(double delta)
     {
         //Update the Rendezvous server label
-        /**GetNode<Label>("CanvasLayer/Control/Label").Text 
-            = "Rendezvous Server: " + rendezvous.isAlive + "\n"
-            + "Room: " + rendezvous._room._name + "\n"
-            + "Host: " + rendezvous._room._host.GetId() + "\n"
-            + "Clients: " + rendezvous._room._clients.Count + "\n";
-    
-        tick();*/
-    }
+        GetNode<Label>("CanvasLayer/Control/Label").Text
+            = "Rendezvous Server: " + (Network.instance.rendezvousAvailable ? "Alive" : "Dead") + "\n"
+            + "Room: " + rendezvous.getRoom()._id + "\n"
+            + "Host: " + rendezvous.getRoom()._host.GetId() + "\n"
+            + "Clients: " + rendezvous.getRoom()._clients.Count + "\n"
+            + "Self:" + rendezvous.getSelf().GetId() + "\n"
+            + " - " + rendezvous.getSelf().GetPort() + "\n"
+            + " - " + rendezvous.getSelf().GetIp() + "\n";
+    }   
 
     public void onCreateRoom(){
         rendezvous.CreateRoom("Test Room");
@@ -38,15 +39,14 @@ public partial class networking_test : Node2D
     }
 
     public void onLeaveRoom(){
-        //rendezvous.leaveRoom();
-        rendezvous.Connect();
+        rendezvous.getRoom().leave(true);
     }
 
 
     public void establishP2P(){
         //rendezvous.requestP2P();
         GD.Print("Requsting P2P");
-        testUDPConn();
+        //testUDPConn();
     }
 
 

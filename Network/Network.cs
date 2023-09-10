@@ -247,4 +247,35 @@ public partial class Network : Node {
 	}
 
 
+	public void BeginConnection()
+	{
+		if (portAvailable)
+		{
+			//Port is available therefore not Hole Punch Needed
+			//Tell Server to let clients to connect to this port
+			Network.EmitRendezvous(RendezvousEvents.SignalName.RequestDirectConnect, defaultPort);
+		}
+		else if (upnpAvailable)
+		{
+			//Port is not available but UPNP is available
+			//Open port using UPNP
+			int result = upnp.AddPortMapping(defaultPort, defaultPort, "DiGames", "UDP", 0);
+			if(result == (int) Upnp.UpnpResult.Success)
+			{
+                //Success
+                //Tell the server to let clients connect to this port
+                Network.EmitRendezvous(RendezvousEvents.SignalName.RequestDirectConnect, defaultPort);
+            } else
+			{
+				//Failed
+				//Attempt Hole Punch
+				rendezvous.StartPeerContact();
+			}
+		}
+		else if (rendezvousAvailable)
+		{
+			//Rendezvous Server is up attempt hole punch
+			rendezvous.StartPeerContact();
+		}
+	}
 }

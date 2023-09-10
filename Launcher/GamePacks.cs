@@ -25,6 +25,19 @@ public partial class GamePacks : Node
         
     }
 
+
+    public GamePack getPack(string name)
+    {
+        foreach(GamePack pack in packs)
+        {
+            if(pack.packName == name)
+            {
+                return pack;
+            }
+        }
+        return null;
+    }
+
     public void checkOnlinePacks()
     {
         //Download the repo file

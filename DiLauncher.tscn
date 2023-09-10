@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://877jbexu5nfw"]
+[gd_scene load_steps=5 format=3 uid="uid://877jbexu5nfw"]
 
 [ext_resource type="Script" path="res://Launcher/launcher_network.cs" id="1_8rjrp"]
 [ext_resource type="Script" path="res://Launcher/DiLauncher.cs" id="1_oirl7"]
 [ext_resource type="Script" path="res://Util/LabelEdit.cs" id="3_1ltcj"]
+[ext_resource type="PackedScene" uid="uid://cb0ft6tgsbvqr" path="res://Launcher/player_card.tscn" id="4_iacjh"]
 
 [node name="Launcher" type="Control"]
 layout_mode = 3
@@ -111,3 +112,14 @@ layout_mode = 2
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
 text = "Settings"
+
+[node name="playerCard" parent="." instance=ExtResource("4_iacjh")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0685764
+anchor_top = 0.0108025
+anchor_right = 0.424479
+anchor_bottom = 0.220679
+offset_right = 0.0
+offset_bottom = 0.0
+metadata/_edit_use_anchors_ = true

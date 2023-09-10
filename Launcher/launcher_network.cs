@@ -14,7 +14,13 @@ public partial class launcher_network : Node
 
     public override void _Process(double delta)
     {
-        statusLabel.Text = "Network Status: " + (Network.instance.rendezvousAvailable ? "Ready" : "Offline");
+        statusLabel.Text = 
+            "Network Status: " + (Network.instance.rendezvousAvailable ? "Ready" : "Offline")
+            + "\n  UPnP Status: " + (Network.instance.upnpAvailable ? "Ready" : "Offline")
+            + "\n  Port Status: " + (Network.instance.portAvailable ? "Ready" : "Offline")
+            + "\n  ID: " + Network.instance.rendezvous.getSelf().GetId()
+            ;
+
     }
 
 

@@ -6,33 +6,16 @@ public partial class DiLauncher : Control
     public override void _Ready()
     {
         initButtons();
+
+        Player player = new Player("dev");
+        player.name = "Dev";
+        GetNode<playerCard>("playerCard").setPlayer(player);
     }
 
 
     public void initButtons()
     {
         Popup popup = GetNode<Popup>("main/join/Popup");
-        /*popup.GetNode<LabelEdit>("Container/TextEdit").TextChanged += () =>
-
-        {
-            TextEdit edit = popup.GetNode<TextEdit>("VBoxContainer/TextEdit");
-            string text = edit.Text.ToUpper();
-            text = text.Length < 4 ? text : text[..4];
-            
-            string copyText = text;
-            foreach(char c in text)
-            {
-                if (!"ABCDEFGHIJKLMNOPQRSTUVWXZ".Contains(c))
-                {
-                    copyText = copyText.Replace(c.ToString(), "");
-                }
-            }
-            GD.Print(copyText);
-            text = copyText;
-            edit.Text = text;
-            edit.SetCaretColumn(text.Length);
-
-        };*/
         GetNode<Button>("main/join").Pressed += () =>
         {
             
@@ -43,10 +26,10 @@ public partial class DiLauncher : Control
             popup.GetNode<Button>("VBoxContainer/submit").Pressed += () =>
             {
                 string roomCode = "";
-                roomCode = popup.GetNode<TextEdit>("VBoxContainer/TextEdit").Text;
+                roomCode = popup.GetNode<LabelEdit>("VBoxContainer/Label").Text;
 
                 //Sanitize and confirm only letters
-                
+
 
 
                 popup.Hide();
@@ -55,12 +38,28 @@ public partial class DiLauncher : Control
                 
             };
 
+            popup.GetNode<LabelEdit>("VBoxContainer/Label").TextChanged += () =>
+            {
+                LabelEdit labelEdit = popup.GetNode<LabelEdit>("VBoxContainer/Label");
+                string currentText = labelEdit.Text;
+
+                if (currentText.Length > 4)
+                {
+                    labelEdit.Text = currentText.Substring(0, 4);
+                }   
+            };
+
             popup.Popup();
         };
 
         GetNode<Button>("main/download").Pressed += () =>
         {
             GetTree().ChangeSceneToFile("res://Launcher/game_browser.tscn");
+        };
+
+        GetNode<Button>("main/host").Pressed += () =>
+        {
+            GetTree().ChangeSceneToFile("res://Launcher/host.tscn");
         };
     }
 
