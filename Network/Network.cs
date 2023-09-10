@@ -25,8 +25,8 @@ public partial class Network : Node {
 	[Signal]
 	public delegate void SendRendezvousEventHandler(string eventName, Variant data);
 
-	[Signal]
-	public delegate void OnSendRendezvousEventHandler(string eventName, Variant data);
+	//[Signal]
+	//public delegate void OnSendRendezvousEventHandler(string eventName, Variant data);
 
 	public StreamPeerTcp tcp = new StreamPeerTcp();
 
@@ -66,7 +66,7 @@ public partial class Network : Node {
 		DefaultEvents.instance.STATUS += (string status) => {
 			GD.Print("Status: "+status);
 		};
-		OnSendRendezvous += (string name, Variant data) => _SendRendezvous(name, data);
+		//OnSendRendezvous += (string name, Variant data) => _SendRendezvous(name, data);
 	}
 
 	public void Connect(){
@@ -245,9 +245,6 @@ public partial class Network : Node {
 	public void Finshed(){
 		GD.Print("Checks completed");
 	}
-   
-
-
 
 
 }
