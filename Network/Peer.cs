@@ -97,4 +97,9 @@ public partial class Peer : Node {
 		GD.Print("Disconnected from peer: "+_id);
 	}
 
+
+	public Peer Clone()
+	{
+		return new Peer(_id, _name, _ip, _port);
+	}
 }
