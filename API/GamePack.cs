@@ -173,14 +173,16 @@ public partial class GamePack : Resource
 
 	public string Serialize()
 	{
-		Dictionary dict = new Dictionary();
-		dict.Add("name", packName);
-		dict.Add("version", packVersion);
-		dict.Add("id", id);
-		dict.Add("path", path);
-		dict.Add("loaded", loaded);
-		dict.Add("downloaded", downloaded);
-		dict.Add("latest", latestVersion);
+		Dictionary dict = new Dictionary
+        {
+            { "name", packName },
+            { "version", packVersion },
+            { "id", id },
+            { "path", path },
+            { "loaded", loaded },
+            { "downloaded", downloaded },
+            { "latest", latestVersion }
+        };
 
 		return Json.Stringify(dict);
 	}
