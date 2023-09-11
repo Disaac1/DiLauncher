@@ -37,6 +37,8 @@ public partial class Network : Node {
 
 	public static bool killSwitch = false;
 
+	public static Player player;
+
 
 	public override void _EnterTree()
 	{
@@ -55,6 +57,9 @@ public partial class Network : Node {
         if (!killSwitch) doChecks();
 		
 		OnChecksCompleted += Finshed;
+
+		player = new("dev");
+		player.name = "Dev";
 	}
 
 

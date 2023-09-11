@@ -19,6 +19,9 @@ public partial class DefaultEvents : Node {
     [Signal]
     public delegate void CheckPortEventHandler(int port);
 
+    [Signal]
+    public delegate void UpdatePlayerEventHandler(Player player);
+
     public static DefaultEvents instance = null;
 
     public override void _EnterTree()
@@ -31,9 +34,16 @@ public partial class DefaultEvents : Node {
     public override void _Ready()
     {
         Network.instance.OnEvent += ((string name, Variant data) => {
-            if(name == "status"){
-                EmitSignal(DefaultEvents.SignalName.STATUS, data.ToString());
+            switch(name)
+            {
+                case "status":
+                    EmitSignal(DefaultEvents.SignalName.STATUS, data.ToString());
+                    break;
+                case "updatePlayer":
+                    EmitSignal(DefaultEvents.SignalName.UpdatePlayer, Player.deserialize(data.ToString()));
+                    break;
             }
+            
         });
 
         Network.instance.SendRendezvous += (string eventName, Variant data) => {
@@ -42,6 +52,9 @@ public partial class DefaultEvents : Node {
             }
             if(eventName == DefaultEvents.SignalName.CheckPort){
                 Network.instance._SendRendezvous("checkPort", data);
+            }
+            if(eventName == DefaultEvents.SignalName.UpdatePlayer){
+                Network.instance._SendRendezvous("updatePlayer", ((Player) data).ToJson());
             }
         };
     }

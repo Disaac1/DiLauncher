@@ -1,8 +1,9 @@
 using System;
+using System.IO;
 using Godot;
 using Godot.Collections;
 
-public class Player
+public partial class Player : Resource
 {
 
     private string _id = "";
@@ -34,22 +35,48 @@ public class Player
         }
     }
 
-    public Player deserialize(string s)
+    public static Player deserialize(string s)
     {
         GD.Print("Deserializing Player: " + s);
 
         Dictionary dict = (Dictionary)Json.ParseString(s);
+        Image image = new Image();
+        image.LoadWebpFromBuffer(Convert.FromBase64String(dict["avatar"].AsString()));
 
-        Player player = new Player(dict["id"].AsString());
-        player.name = dict["name"].AsString();
+        Player player = new Player(dict["id"].AsString())
+        {
+            name = dict["name"].AsString(),
+            avatar = ImageTexture.CreateFromImage(image)
+        };
 
         return player;
 
     }
 
+    public string ToJson()
+    {
+        byte[] image = avatar.GetImage().SaveWebpToBuffer(true, 0.75f);
+        string imageString = Convert.ToBase64String(image);
+
+        Dictionary dict = new Dictionary();
+        dict.Add("id", _id);
+        dict.Add("name", name);
+        dict.Add("avatar", imageString);
+        return Json.Stringify(dict);
+    }
+
     public string GetID()
     {
         return _id;
+    }
+
+
+    /**
+    *  <summary>Sync player data to the server</summary>
+    */ 
+    public void Sync()
+    {
+        EmitSignal(DefaultEvents.SignalName.UpdatePlayer, this);   
     }
 
 }
