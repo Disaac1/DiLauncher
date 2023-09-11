@@ -28,7 +28,7 @@ public partial class playerCard : Control
 	{
 		if(IsEditable)
 		{
-			
+			player.name = text;
 		}
 	}
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cb0ft6tgsbvqr"]
 
-[ext_resource type="Script" path="res://playerCard.cs" id="1_gcqvt"]
+[ext_resource type="Script" path="res://Launcher/playerCard.cs" id="1_gcqvt"]
 [ext_resource type="Texture2D" uid="uid://bluwr38so0h5o" path="res://icon.svg" id="2_ji15g"]
 [ext_resource type="Script" path="res://Util/LabelEdit.cs" id="3_lsdwb"]
 
