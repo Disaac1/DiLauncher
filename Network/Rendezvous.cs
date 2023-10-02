@@ -35,6 +35,7 @@ public partial class Rendezvous : Node
     {
         self._id = id.id;
         self._port = id.port;
+        Network.player.peer = self;
     }
     
     public void CreateRoom(string name)
@@ -45,6 +46,7 @@ public partial class Rendezvous : Node
 
     public void onRoomCreated(string id)
     {
+        
         room.SetHost(self.Clone());
         room._name = "My Room";
         room._id = id;
