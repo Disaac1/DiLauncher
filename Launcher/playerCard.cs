@@ -5,22 +5,13 @@ public partial class playerCard : Control
 {
 
 	[Export]
-	public bool IsEditable
-	{
-		get
-		{
-			return GetNode<LabelEdit>("name").readOnly;
-		}
-		set
-		{
-			GetNode<LabelEdit>("name").readOnly = value;
-		}
-	}
+	public bool IsEditable = false;
 
 
 	public override void _Ready()
 	{
 		GetNode<LabelEdit>("name").TextSubmitted += updateName;
+		GetNode<LabelEdit>("name").readOnly = !IsEditable;
 	}
 
 
@@ -28,6 +19,7 @@ public partial class playerCard : Control
 	{
 		if(IsEditable)
 		{
+			GD.Print("Setting name to: " + text);
 			player.name = text;
 		}
 	}
