@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class  RendezvousEvents : Node 
@@ -28,6 +29,11 @@ public partial class  RendezvousEvents : Node
 	[Signal]
 	public delegate void RequestDirectConnectEventHandler(int port);
 
+	[Signal]
+	public delegate void RequestPlayerInfoEventHandler(string peerID);
+
+
+	
 
 	public partial class IDEvent : Resource
 	{
@@ -105,6 +111,10 @@ public partial class  RendezvousEvents : Node
 			if(eventName == RendezvousEvents.SignalName.RequestDirectConnect)
 			{
 				Network.instance._SendRendezvous("requestDirectConnect", data);
+			}
+			if(eventName == RendezvousEvents.SignalName.RequestPlayerInfo)
+			{
+				Network.instance._SendRendezvous("requestPlayerInfo", data);
 			}
 		};
 	}
