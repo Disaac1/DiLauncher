@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../../AppData/Roaming/Godot/app_userdata/DiLauncher"
+		},
+		{
+			"path": "../test"
+		}
+	],
+	"settings": {
+		"godot.csharp.executablePath": "\"C:\\Users\\isaac\\Desktop\\Godot_v4.1-stable_mono_win64\\Godot_v4.1-stable_mono_win64.exe\"",
+		"dotnet.defaultSolution": "DiLauncher.sln",
+		"godot_tools.editor_path": "c:\\Users\\isaac\\Documents\\GitHub\\DiLauncher\\.godotFiles\\Godot_v4.1.1-stable_mono_win64.exe",
+		"dotnet.server.useOmnisharp": true,
+		"godot_tools.scene_file_config": "c:\\Users\\isaac\\Documents\\GitHub\\DiLauncher\\test"
+	}
+}
