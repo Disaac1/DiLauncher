@@ -22,6 +22,9 @@ public partial class DefaultEvents : Node {
     [Signal]
     public delegate void UpdatePlayerEventHandler(Player player);
 
+    [Signal]
+    public delegate void OnQuitEventHandler();
+
     public static DefaultEvents instance = null;
 
     public override void _EnterTree()
