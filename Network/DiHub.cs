@@ -11,7 +11,7 @@ public partial class DiHub
 	/**
 	 * <summary>Get a file from the download repo at loaction</summary>
 	 */
-	public static void get(string location, string saveLocation)
+	public static bool get(string location, string saveLocation)
 	{
 		string uri = "https://download.disaac1.com/"+ location;
 
@@ -29,11 +29,12 @@ public partial class DiHub
 		{
 			GD.Print("WebException: " + err.Message);
 			GD.Print("Tried to download " + uri + " to " + saveLocation);
-			return;
+			return false;
 		}
 		
 
 		GD.Print("Downloaded " + uri + " to " + saveLocation);
+		return true;
 	}
 
 	public static Resource load(string location)
@@ -43,7 +44,10 @@ public partial class DiHub
 
 		if(ext != ".webp") return null;
 		string tempFile = "user://temp/" + Path.GetRandomFileName() + ext;
-		get(location, tempFile);
+		if(!get(location, tempFile))
+		{
+			return null;
+		}
 		//Godot doesn't allow loading files from user:// so we have to load it with file type specific code
 
 		Resource res;
