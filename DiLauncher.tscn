@@ -122,4 +122,5 @@ anchor_right = 0.424479
 anchor_bottom = 0.220679
 offset_right = 0.0
 offset_bottom = 0.0
+IsEditable = true
 metadata/_edit_use_anchors_ = true
