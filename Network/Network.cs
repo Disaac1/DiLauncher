@@ -35,6 +35,8 @@ public partial class Network : Node {
 
 	public Rendezvous rendezvous = new Rendezvous();
 
+	public RichPressence discord = new RichPressence();
+
 	public static bool killSwitch = false;
 
 	public static Player player;
@@ -45,22 +47,66 @@ public partial class Network : Node {
 		base._EnterTree();
 		instance ??= this;
 
-    }
+		GetTree().AutoAcceptQuit = false;
+
+		GodotLogger.info("This is a test message");
+
+		//player = Player.LoadFile("user://player.json");
+
+	}
 
 	public override void _Ready()
 	{
-        Setup();
-        Connect();
+		Setup();
+		Connect();
 
-        AddChild(rendezvous);
+		AddChild(rendezvous);
+		AddChild(discord);
 
-        if (!killSwitch) doChecks();
+		if (!killSwitch) doChecks();
 		
 		OnChecksCompleted += Finshed;
 
-		player = new("dev");
-		player.name = "Dev";
+		if(player == null){
+			player = new("player");
+			player.name = "Player";
+			if(OS.HasFeature("Editor") || OS.HasFeature("Dev"))
+			{
+				player = new("dev");
+				player.name = "Dev";
+			}
+		}
+		
+		player.Save();
+
 	}
+
+	public override void _Notification(int what)
+	{
+		if(what == NotificationWMCloseRequest)
+		{
+			try
+			{
+				player.Save();
+				EmitRendezvous(RendezvousEvents.SignalName.LeaveRoom, "");
+				tcp.DisconnectFromHost();
+				DiscordRichPressence.clear();
+
+
+
+
+
+				
+			}catch(Exception err)
+			{
+				GD.Print("Error on close: "+err.Message);
+			}
+			GetTree().Quit(0);
+		}
+	}
+
+
+	
 
 
 	public void Setup(){
@@ -83,12 +129,12 @@ public partial class Network : Node {
 		tcp.Poll();
 		if(tcp.GetStatus() == StreamPeerTcp.Status.Connected)
 		{
-            while (tcp.GetAvailableBytes() > 0)
-            {
-                string packet = tcp.GetUtf8String();
-                handleData(packet);
-            }
-        }
+			while (tcp.GetAvailableBytes() > 0)
+			{
+				string packet = tcp.GetUtf8String();
+				handleData(packet);
+			}
+		}
 		if (killSwitch)
 		{
 			SetProcess(false);
@@ -117,15 +163,15 @@ public partial class Network : Node {
 
 	public async void doChecks(){
 
-        System.Collections.Generic.List<Task> tasks = new System.Collections.Generic.List<Task>
-        {
-            Task.Run(async () =>
-            {
-                await CheckIfRendezvousOpen();
-                await CheckIfPortOpen();
-            }),
-            CheckUpnp()
-        };
+		System.Collections.Generic.List<Task> tasks = new System.Collections.Generic.List<Task>
+		{
+			Task.Run(async () =>
+			{
+				await CheckIfRendezvousOpen();
+				await CheckIfPortOpen();
+			}),
+			CheckUpnp()
+		};
 
 
 		await Task.WhenAny(Task.WhenAll(tasks), Task.Run(() =>
@@ -267,10 +313,10 @@ public partial class Network : Node {
 			int result = upnp.AddPortMapping(defaultPort, defaultPort, "DiGames", "UDP", 0);
 			if(result == (int) Upnp.UpnpResult.Success)
 			{
-                //Success
-                //Tell the server to let clients connect to this port
-                Network.EmitRendezvous(RendezvousEvents.SignalName.RequestDirectConnect, defaultPort);
-            } else
+				//Success
+				//Tell the server to let clients connect to this port
+				Network.EmitRendezvous(RendezvousEvents.SignalName.RequestDirectConnect, defaultPort);
+			} else
 			{
 				//Failed
 				//Attempt Hole Punch
