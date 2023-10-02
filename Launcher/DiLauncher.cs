@@ -6,10 +6,7 @@ public partial class DiLauncher : Control
     public override void _Ready()
     {
         initButtons();
-
-        Player player = new Player("dev");
-        player.name = "Dev";
-        GetNode<playerCard>("playerCard").setPlayer(player);
+        GetNode<playerCard>("playerCard").setPlayer(Network.player);
     }
 
 
