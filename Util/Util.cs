@@ -1,5 +1,7 @@
 ﻿using Godot;
+using System;
 using System.IO;
+using System.Linq;
 
 public class Util
 {
@@ -53,5 +55,28 @@ public class Util
         }
 
         Directory.Delete(path, true);
+    }
+
+    public static string prettyJSON(string json, string indent = "    ")
+    {
+
+        int indentation = 0;
+        int quoteCount = 0;
+        int escapeCount = 0;
+        var result =
+        from ch in json ?? string.Empty
+        let escaped = (ch == '\\' ? escapeCount++ : escapeCount > 0 ? escapeCount-- : escapeCount) > 0
+        let quotes = ch == '"' && !escaped ? quoteCount++ : quoteCount
+        let unquoted = quotes % 2 == 0
+        let colon = ch == ':' && unquoted ? ": " : null
+        let nospace = char.IsWhiteSpace(ch) && unquoted ? string.Empty : null
+        let lineBreak = ch == ',' && unquoted ? ch + System.Environment.NewLine + string.Concat(Enumerable.Repeat(indent, indentation)) : null
+        let openChar = (ch == '{' || ch == '[') && unquoted ? ch + System.Environment.NewLine + string.Concat(Enumerable.Repeat(indent, ++indentation)) : ch.ToString()
+        let closeChar = (ch == '}' || ch == ']') && unquoted ? System.Environment.NewLine + string.Concat(Enumerable.Repeat(indent, --indentation)) + ch : ch.ToString()
+        select colon ?? nospace ?? lineBreak ?? (
+            openChar.Length > 1 ? openChar : closeChar
+        );
+
+        return String.Concat(result);
     }
 }
