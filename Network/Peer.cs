@@ -11,11 +11,23 @@ public partial class Peer : Node {
 	[Export]
 	public int _port = 0;
 
+	public Player player = null;
+
 	public Peer(string id, string name, string ip, int port){
 		_id = id;
 		_name = name;
 		_ip = ip;
 		_port = port;
+
+		requestPlayer();
+
+		
+	}
+
+	public void requestPlayer()
+	{
+		GD.Print("Not Implemented");
+		//Network.EmitRendezvous(RendezvousEvents.SignalName.RequestPlayerInfo, _id);
 	}
 
 	//TODO: Read name if it exists
