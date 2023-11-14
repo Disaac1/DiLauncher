@@ -1,0 +1,45 @@
+[gd_resource type="AudioBusLayout" load_steps=6 format=3 uid="uid://bfifbajofhcso"]
+
+[sub_resource type="AudioEffectCapture" id="AudioEffectCapture_r42dt"]
+resource_name = "Capture"
+
+[sub_resource type="AudioEffectDistortion" id="AudioEffectDistortion_o47hg"]
+resource_name = "Distortion"
+mode = 1
+pre_gain = 15.0
+drive = 0.49
+post_gain = -17.34
+
+[sub_resource type="AudioEffectDistortion" id="AudioEffectDistortion_efpvk"]
+resource_name = "Distortion"
+mode = 4
+pre_gain = 18.75
+drive = 0.61
+post_gain = -21.67
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_tae8v"]
+resource_name = "Reverb"
+room_size = 0.16
+
+[sub_resource type="AudioEffectDelay" id="AudioEffectDelay_oookx"]
+resource_name = "Delay"
+tap1_active = false
+tap2_active = false
+
+[resource]
+bus/1/name = &"Mircrophone"
+bus/1/solo = false
+bus/1/mute = false
+bus/1/bypass_fx = false
+bus/1/volume_db = -12.4611
+bus/1/send = &"Master"
+bus/1/effect/0/effect = SubResource("AudioEffectCapture_r42dt")
+bus/1/effect/0/enabled = false
+bus/1/effect/1/effect = SubResource("AudioEffectDistortion_o47hg")
+bus/1/effect/1/enabled = true
+bus/1/effect/2/effect = SubResource("AudioEffectDistortion_efpvk")
+bus/1/effect/2/enabled = true
+bus/1/effect/3/effect = SubResource("AudioEffectReverb_tae8v")
+bus/1/effect/3/enabled = false
+bus/1/effect/4/effect = SubResource("AudioEffectDelay_oookx")
+bus/1/effect/4/enabled = false

@@ -9,8 +9,6 @@ public partial class CreatePack : SceneTree
 
 	public override async void _Initialize()
 	{
-		Network.killSwitch = true;
-
 
 		List<Task> tasks = new List<Task>();
 

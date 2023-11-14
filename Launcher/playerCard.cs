@@ -20,13 +20,13 @@ public partial class playerCard : Control
 		if(IsEditable)
 		{
 			GD.Print("Setting name to: " + text);
-			player.name = text;
+			player.SetName(text);
 		}
 	}
 
-	public Player player = null;
+	public PlayerNetwork player = null;
 
-	public void setPlayer(Player player)
+	public void setPlayer(PlayerNetwork player)
 	{
 		this.player = player;
 		updateUI();
@@ -42,9 +42,9 @@ public partial class playerCard : Control
 		{
 			GetNode<TextureRect>("icon").Texture = player.avatar;
 		}
-		if(player.name != null)
+		if(player.Name != null)
 		{
-			GetNode<Label>("name").Text = player.name;
+			GetNode<Label>("name").Text = player.Name;
 		}
 		QueueRedraw();
 	}

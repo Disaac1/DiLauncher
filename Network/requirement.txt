@@ -1,0 +1,114 @@
+Requirements for the Network stack
+
+- Connect to the Rendezvous server over TCP
+- Send and recieve events over TCP
+
+- Event Requirements
+  - Event typing -- Have a statically typed event System
+  - Event serialization -- Serialize events with or without encryption following a common api
+  - Event routing -- Return if an event is received or with its expeceted return data
+
+
+
+  Communication Protocol
+
+  All events sent will be of format
+
+  ```json
+  {
+    "type": "event_type",
+    "name": "event_name",
+    "data": "event_data"
+  }
+  ```
+  Types of events
+  -- Pass Event -- An event that is sent to the server and does not expect a response
+     -- Confirm Pass Event -- An event that is sent to the client to confirm that a pass event was recieved
+  -- Request Event -- An event that is sent to the server and expects a response
+  -- Response Event -- An event that is sent to the client in response to a request event
+
+  Additional information required for each event type
+  -- Pass Event -- None
+     -- Confirm Pass Event -- The unique id of the pass event that this is a confirmation of
+  -- Request Event -- A unique id for the request
+  -- Response Event -- The unique id of the request that this is a response to
+
+  Example of a pass event
+  ```json
+  {
+    "type": "pass",
+    "dest": "peerID",
+    "name": "test_event",
+    "data": "test_data"
+  }
+  ```
+
+  Example of a confirm pass event
+
+  -- Local to Remote
+  ```json
+  {
+    "type": "confirm_pass",
+    "name": "test_event",
+    "data": "test_data",
+    "pass_id": "test_pass_id"
+  }
+  ```
+
+  -- Remote to Local
+  ```json
+  {
+    "type": "confirm_pass",
+    "pass_id": "test_pass_id"
+  }
+  ```
+
+
+  Example of a request event
+  ```json
+  {
+    "type": "request",
+    "name": "test_event",
+    "data": "test_data",
+    "request_id": "test_request_id"
+  }
+  ```
+
+  Example of a response event
+  ```json
+  {
+    "type": "response",
+    "name": "test_event",
+    "data": "test_data",
+    "request_id": "test_request_id"
+  }
+  ```
+
+
+  Example high level
+
+  Client A, Client B, Server
+
+  Client A sends a pass event to the server
+  Server receives (or doesn't) the pass event
+
+  Client B send a confirm pass event to the server
+  Server receives (or doesn't) the confirm pass event, then sends a confirm pass event to Client B
+  Client B sees the confirm pass event and knows that the server has received the pass event
+
+
+
+
+Login System
+
+- Send a login request to the server with a id
+
+
+Room Requirements
+
+- Create Room
+- Delete Room (Host Only)
+- Player Joined
+- Player Left
+- Self Joined
+- Self Left

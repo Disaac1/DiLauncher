@@ -15,10 +15,14 @@ run/main_scene="res://DiLauncher.tscn"
 config/features=PackedStringArray("4.1", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[audio]
+
+driver/enable_input=true
+
 [autoload]
 
-Network="res://Network/Network.cs"
-GamePacks="res://Launcher/GamePacks.cs"
+Network="*res://Network/Core/Network.cs"
+GamePacks="*res://Launcher/GamePacks.cs"
 DiscordSDKLoader="*res://addons/discord-sdk-gd/nodes/core_updater.gd"
 GodotLogger="*res://addons/logger/logger.gd"
 
@@ -32,4 +36,5 @@ enabled=PackedStringArray("res://addons/discord-sdk-gd/plugin.cfg", "res://addon
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method.mobile="gl_compatibility"
